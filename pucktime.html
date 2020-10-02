@@ -35,7 +35,7 @@ $(document).ready(function () {
                             digitsAfterDecimal: 3,
                             dateWindow: [date_win_min, date_win_max],
                             // valueRange: [980, 1020],
-                            labels: ['Time', 'Pressure'],
+                            labels: ['Time', 'Acceleration'],
                             showRangeSelector: true
                           });
       
@@ -61,7 +61,7 @@ $(document).ready(function () {
                               connection.write("clearInterval(1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accZ).toFixed(3));}, 100); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz().toFixed(3));}, 100); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
@@ -70,36 +70,6 @@ $(document).ready(function () {
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
                         };   
-                        if(rec_flag) {
-                              rec_startstop.textContent = "Start New Recording";
-                              rec_flag = false; 
-                              connection.write("clearInterval(1)\n", function() { });
-                        } else {
-                              data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accX).toFixed(3));}, 100); \n", function() { });
-                              t = new Date();
-                              start_time = t;
-                              var date_win_min = t.getTime();
-                              var date_win_max = date_win_min + 2*taxis_increment;
-                              g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
-                              rec_flag = true;
-                              rec_startstop.textContent= "Stop Recording";
-                        };
-                         if(rec_flag) {
-                              rec_startstop.textContent = "Start New Recording";
-                              rec_flag = false; 
-                              connection.write("clearInterval(1)\n", function() { });
-                        } else {
-                              data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accY).toFixed(3));}, 100); \n", function() { });
-                              t = new Date();
-                              start_time = t;
-                              var date_win_min = t.getTime();
-                              var date_win_max = date_win_min + 2*taxis_increment;
-                              g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
-                              rec_flag = true;
-                              rec_startstop.textContent= "Stop Recording";
-                        };     
       }
    
       function bluetooth_connect() {
