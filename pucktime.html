@@ -61,9 +61,9 @@ $(document).ready(function () {
                               connection.write("clearInterval(1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(1).toFixed(3));}, 100); \n", function() { });
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(2).toFixed(3));}, 100); \n", function() { });
-                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(3).toFixed(3));}, 100); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accX).toFixed(3));}, 100); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accY).toFixed(3));}, 100); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(accel_xyz(accZ).toFixed(3));}, 100); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
