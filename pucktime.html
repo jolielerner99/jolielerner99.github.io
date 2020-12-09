@@ -13,6 +13,7 @@
 </head>
 <body>
 <div id="div_g" style="width:1200px; height:600px;"></div>
+<div id="div_g2" style="width:1200px; height:600px;"></div>
 <script type="text/javascript">
 $(document).ready(function () {
       var data = [];
@@ -37,14 +38,16 @@ $(document).ready(function () {
                             // valueRange: [980, 1020],
                             labels: ['Time', 'Pressure'],
                             showRangeSelector: true
-                            series : {
-                              'Y1' :{
-                                    axis: 'y1'
-                                },
-                              'Y2' :{
-                                    axis: 'y1'
-                                }
-                          }
+                          });
+      var g2 = new Dygraph(document.getElementById("div_g2"), data,
+                          {
+                            drawPoints: true,
+                            showRoller: true,
+                            digitsAfterDecimal: 3,
+                            dateWindow: [date_win_min, date_win_max],
+                            // valueRange: [980, 1020],
+                            labels: ['Time', 'Pressure'],
+                            showRangeSelector: true
                           });
       
        function onLine(v) {
@@ -61,6 +64,20 @@ $(document).ready(function () {
             };
       }  
     
+      function onLine(v) {
+            if(rec_flag) {
+                        var x = new Date();  // current time 
+                        var y = parseFloat(v);
+                        if ( x.getTime() >= date_win_max) {
+                                    date_win_min += taxis_increment;
+                                     date_win_max += taxis_increment;
+                                     g2.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
+                        };
+                        data.push([x, y]);
+                        g2.updateOptions( { 'file': data } );
+            };
+      }  
+      
       function startstop_record()
       {                
                         if(rec_flag) {
@@ -70,11 +87,13 @@ $(document).ready(function () {
                         } else {
                               data.splice(0,data.length);
                               connection.write("setInterval(function(){Bluetooth.println(pressureValues().toFixed(3));}, 100); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(pressureValues().toFixed(3));}, 100); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
                               var date_win_max = date_win_min + 2*taxis_increment;
-                              g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
+                              g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );    
+                              g2.updateOptions( { dateWindow : [date_win_min, date_win_max] } );  
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
                         };   
